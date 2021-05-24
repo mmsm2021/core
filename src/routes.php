@@ -1,10 +1,8 @@
 <?php
 
+use App\Actions\Location\GetAction;
+use App\Actions\Location\ListAction;
 use Slim\Routing\RouteCollectorProxy;
-use App\Actions\Add;
-use App\Actions\Read;
-use App\Actions\Delete;
-use App\Actions\ReadByLocation;
 
 /** @var \Slim\App $app */
 /** @var \Psr\Container\ContainerInterface $container */
@@ -15,5 +13,6 @@ $authMiddleware = $container->get(\MMSM\Lib\AuthorizationMiddleware::class);
 $bodyMiddleware = $container->get(\Slim\Middleware\BodyParsingMiddleware::class);
 
 $app->group('/api/v1', function(RouteCollectorProxy $group) use ($authMiddleware, $bodyMiddleware) {
-    //Add routes here.
+    $group->get('/location', ListAction::class);
+    $group->get('/location/{id}', GetAction::class);
 });
