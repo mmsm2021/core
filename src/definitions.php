@@ -1,5 +1,6 @@
 <?php
 
+use App\Database\Types\PointType;
 use App\Exceptions\DefinitionException;
 use MMSM\Lib\AuthorizationMiddleware;
 use MMSM\Lib\Parsers\JsonBodyParser;
@@ -14,6 +15,7 @@ use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
 use Slim\Middleware\BodyParsingMiddleware;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Psr7\Factory\ResponseFactory;
+use Doctrine\DBAL\Types\Type;
 
 use function DI\env;
 use function DI\create;
@@ -84,9 +86,16 @@ return [
         return $config;
     },
     EntityManager::class => function(ContainerInterface $container, Configuration $configuration) {
-        return EntityManager::create([
+        $em = EntityManager::create([
             'url' => $container->get('database.connection.url')
         ], $configuration);
+        if (!Type::hasType(PointType::POINT)) {
+            Type::addType(PointType::POINT, PointType::class);
+        }
+        $em->getConnection()
+            ->getDatabasePlatform()
+            ->registerDoctrineTypeMapping('point', 'point');
+        return $em;
     },
     BodyParsingMiddleware::class => function(JsonBodyParser $jsonBodyParser, XmlBodyParser $xmlBodyParser) {
         return new BodyParsingMiddleware([
