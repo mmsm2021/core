@@ -144,6 +144,24 @@ class Location implements EntityInterface
     }
 
     /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'point' => $this->getPoint()->toArray(),
+            'metadata' => $this->getMetadata(),
+            'createdAt' => $this->getCreatedAt()->format(\DateTimeInterface::ISO8601),
+            'updatedAt' => ($this->getUpdatedAt() instanceof DateTimeImmutable ?
+            $this->getUpdatedAt()->format(\DateTimeInterface::ISO8601) : null),
+            'deletedAt' => ($this->getDeletedAt() instanceof DateTimeImmutable ?
+                $this->getDeletedAt()->format(\DateTimeInterface::ISO8601) : null),
+        ];
+    }
+
+    /**
      * @inheritDoc
      */
     public static function loadMetadata(ClassMetadata $metadata)

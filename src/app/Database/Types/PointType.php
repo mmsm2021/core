@@ -3,6 +3,7 @@
 namespace App\Database\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQL94Platform;
 use Doctrine\DBAL\Types\Type;
 use App\Data\Types\Point;
 
@@ -31,7 +32,8 @@ class PointType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        list($longitude, $latitude) = sscanf($value, 'POINT(%f %f)');
+        $format = (stristr($platform->getName(), 'postgre') !== false ? '(%f,%f)' : 'POINT(%f %f)');
+        list($longitude, $latitude) = sscanf($value, $format);
 
         return new Point($latitude, $longitude);
     }
@@ -41,6 +43,10 @@ class PointType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if (stristr($platform->getName(), 'postgre') !== false && $value instanceof Point) {
+            return sprintf('(%F,%F)', $value->getLongitude(), $value->getLatitude());
+        }
+
         if ($value instanceof Point) {
             $value = sprintf('POINT(%F %F)', $value->getLongitude(), $value->getLatitude());
         }
@@ -61,7 +67,11 @@ class PointType extends Type
      */
     public function convertToPHPValueSQL($sqlExpr, $platform)
     {
-        return sprintf('AsText(%s)', $sqlExpr);
+        if ($platform instanceof PostgreSQL94Platform) {
+            return $sqlExpr;
+        } else {
+            return sprintf('AsText(%s)', $sqlExpr);
+        }
     }
 
     /**
@@ -69,6 +79,10 @@ class PointType extends Type
      */
     public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform)
     {
-        return sprintf('PointFromText(%s)', $sqlExpr);
+        if ($platform instanceof PostgreSQL94Platform) {
+            return $sqlExpr;
+        } else {
+            return sprintf('PointFromText(%s)', $sqlExpr);
+        }
     }
 }
