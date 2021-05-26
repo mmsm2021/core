@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13f9c4750e550c9af62c85f07a147e05",
+    "content-hash": "724a9959e16cfb466ee626ab6b50cb6c",
     "packages": [
         {
             "name": "brick/math",
@@ -1628,16 +1628,16 @@
         },
         {
             "name": "mmsm/service-lib",
-            "version": "1.4.0",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmsm2021/service-lib.git",
-                "reference": "8399db165d15186a7d331e6e26dc980afdc72463"
+                "reference": "0dd7fc3a911ec2326740327ccbdf341179359602"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmsm2021/service-lib/zipball/8399db165d15186a7d331e6e26dc980afdc72463",
-                "reference": "8399db165d15186a7d331e6e26dc980afdc72463",
+                "url": "https://api.github.com/repos/mmsm2021/service-lib/zipball/0dd7fc3a911ec2326740327ccbdf341179359602",
+                "reference": "0dd7fc3a911ec2326740327ccbdf341179359602",
                 "shasum": ""
             },
             "require": {
@@ -1645,11 +1645,13 @@
                 "ext-simplexml": "*",
                 "fig/http-message-util": "^1.1.5",
                 "kelvinmo/simplejwt": "^0.5.2",
+                "monolog/monolog": "^2.2",
                 "php-di/php-di": "^6.0.0",
                 "psr/container": "^1.0",
                 "psr/http-server-middleware": "^1.0",
                 "psr/log": "^1.1",
                 "respect/validation": "^2.2",
+                "slim/psr7": "^1.4",
                 "slim/slim": "^4.7"
             },
             "type": "library",
@@ -1669,10 +1671,10 @@
             ],
             "description": "Service Library",
             "support": {
-                "source": "https://github.com/mmsm2021/service-lib/tree/1.4.0",
+                "source": "https://github.com/mmsm2021/service-lib/tree/2.0.2",
                 "issues": "https://github.com/mmsm2021/service-lib/issues"
             },
-            "time": "2021-05-25T11:01:04+00:00"
+            "time": "2021-05-26T10:08:00+00:00"
         },
         {
             "name": "monolog/monolog",

@@ -6,6 +6,7 @@ use App\Database\Entities\Location;
 use App\Database\Entities\Log;
 use App\Database\RepositoryInterface;
 use App\Database\Traits\Repository\TimestampPropertyTrait;
+use App\Exceptions\DeleteException;
 use App\Exceptions\NoSuchEntityException;
 use App\Exceptions\SaveException;
 use Doctrine\ORM\EntityManager;
@@ -131,6 +132,29 @@ class LocationRepository implements RepositoryInterface
 
     /**
      * @param Location $location
+     * @param bool $hard
+     * @throws DeleteException
+     */
+    public function delete(Location $location, bool $hard = false): void
+    {
+        try {
+            if ($hard) {
+                $this->getEntityManager()->remove($location);
+                $this->getEntityManager()->flush();
+                return;
+            }
+            $this->markEntityAsDeleted($location);
+            $this->persist($location);
+        } catch (\Throwable $exception) {
+            throw new DeleteException(
+                'Failed to delete location with id "' . $location->getId() . '".',
+                $exception
+            );
+        }
+    }
+
+    /**
+     * @param Location $location
      * @throws \App\Exceptions\IncompatibleTraitException
      * @throws \ReflectionException
      */
@@ -139,6 +163,18 @@ class LocationRepository implements RepositoryInterface
         $this->getUpdatedProperty()->setAccessible(true);
         $this->getUpdatedProperty()->setValue($location, new \DateTimeImmutable('now'));
         $this->getUpdatedProperty()->setAccessible(false);
+    }
+
+    /**
+     * @param Location $location
+     * @throws \App\Exceptions\IncompatibleTraitException
+     * @throws \ReflectionException
+     */
+    public function markEntityAsDeleted(Location $location): void
+    {
+        $this->getDeletedProperty()->setAccessible(true);
+        $this->getDeletedProperty()->setValue($location, new \DateTimeImmutable('now'));
+        $this->getDeletedProperty()->setAccessible(false);
     }
 
     /**

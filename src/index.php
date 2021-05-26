@@ -7,6 +7,7 @@ $containerBuilder = new \DI\ContainerBuilder(
 );
 
 $containerBuilder->addDefinitions(__DIR__ . '/definitions.php');
+$containerBuilder->addDefinitions(__DIR__ . '/vendor/mmsm/service-lib/definitions.php');
 
 $container = $containerBuilder->build();
 $app = \DI\Bridge\Slim\Bridge::create($container);

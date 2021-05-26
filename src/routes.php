@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Location\DeleteAction;
 use App\Actions\Location\GetAction;
 use App\Actions\Location\ListAction;
 use App\Actions\Location\PostAction;
@@ -16,4 +17,5 @@ $app->group('/api/v1', function(RouteCollectorProxy $group) {
     $group->get('/location', ListAction::class);
     $group->get('/location/{id}', GetAction::class);
     $group->post('/location', PostAction::class);
+    $group->delete('/location/{id}', DeleteAction::class);
 });

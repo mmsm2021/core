@@ -71,7 +71,6 @@ class PostAction
         }
 
         $this->locationValidator->check($body);
-
         try {
             $location = new Location();
             $location->setName($body['name']);
@@ -85,7 +84,6 @@ class PostAction
             $this->locationRepository->save($location);
             return $this->jsonResponseFactory->create(200, $location->toArray());
         } catch (SaveException $exception) {
-            dd($exception);
             throw new HttpBadRequestException($request, $exception->getMessage(), $exception);
         }
     }

@@ -67,7 +67,7 @@ class PointType extends Type
      */
     public function convertToPHPValueSQL($sqlExpr, $platform)
     {
-        if ($platform instanceof PostgreSQL94Platform) {
+        if (stristr(get_class($platform), 'postgre') !== false) {
             return $sqlExpr;
         } else {
             return sprintf('AsText(%s)', $sqlExpr);
@@ -79,7 +79,7 @@ class PointType extends Type
      */
     public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform)
     {
-        if ($platform instanceof PostgreSQL94Platform) {
+        if (stristr(get_class($platform), 'postgre') !== false) {
             return $sqlExpr;
         } else {
             return sprintf('PointFromText(%s)', $sqlExpr);
