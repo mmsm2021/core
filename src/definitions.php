@@ -1,34 +1,14 @@
 <?php
 
 use App\Database\Types\PointType;
-use App\Exceptions\DefinitionException;
-use MMSM\Lib\AuthorizationMiddleware;
-use MMSM\Lib\ErrorHandlers\JsonErrorHandler;
-use MMSM\Lib\ErrorHandlers\ValidationExceptionJsonHandler;
-use MMSM\Lib\Parsers\JsonBodyParser;
-use MMSM\Lib\Parsers\XmlBodyParser;
-use MMSM\Lib\Validators\JWKValidator;
-use MMSM\Lib\Validators\JWTValidator;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
-use Psr\Log\LoggerInterface;
-use Respect\Validation\Exceptions\ValidationException;
-use Slim\App;
-use Slim\Middleware\BodyParsingMiddleware;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\Middleware\ErrorMiddleware;
-use Slim\Psr7\Factory\ResponseFactory;
 use Doctrine\DBAL\Types\Type;
 
 use function DI\env;
-use function DI\create;
-use function DI\get;
-use function DI\string;
 
 return [
     'root.dir' => __DIR__,

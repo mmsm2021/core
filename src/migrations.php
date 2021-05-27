@@ -2,6 +2,13 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$container = (new \DI\ContainerBuilder())->addDefinitions(__DIR__ . '/definitions.php')->build();
+$containerBuilder = new \DI\ContainerBuilder(
+    \MMSM\Lib\Container::class
+);
+
+$containerBuilder->addDefinitions(__DIR__ . '/definitions.php');
+$containerBuilder->addDefinitions(__DIR__ . '/vendor/mmsm/service-lib/definitions.php');
+
+$container = $containerBuilder->build();
 
 return $container->get('database.migrations.config');
