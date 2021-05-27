@@ -7,6 +7,7 @@ use App\Data\Validator\LocationValidator;
 use App\Database\Entities\Location;
 use App\Database\Repositories\LocationRepository;
 use App\Exceptions\SaveException;
+use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -33,18 +34,27 @@ class PostAction
     private LocationRepository $locationRepository;
 
     /**
+     * @var Authorizer
+     */
+    private Authorizer $authorizer;
+
+    /**
      * Get constructor.
      * @param JsonResponseFactory $jsonResponseFactory
      * @param LocationValidator $locationValidator
+     * @param LocationRepository $locationRepository
+     * @param Authorizer $authorizer
      */
     public function __construct(
         JsonResponseFactory $jsonResponseFactory,
         LocationValidator $locationValidator,
-        LocationRepository $locationRepository
+        LocationRepository $locationRepository,
+        Authorizer $authorizer
     ) {
         $this->jsonResponseFactory = $jsonResponseFactory;
         $this->locationValidator = $locationValidator;
         $this->locationRepository = $locationRepository;
+        $this->authorizer = $authorizer;
     }
 
     /**
@@ -62,14 +72,7 @@ class PostAction
             ]);
         }
 
-        $token = $request->getAttribute('token');
-        if ($token instanceof \Throwable) {
-            throw $token;
-        }
-        if ($token === null || !($token instanceof JWT)) {
-            throw new HttpUnauthorizedException($request, 'Missing or Invalid Token.');
-        }
-
+        $this->authorizer->authorizeToRole($request, 'user.roles.super');
         $this->locationValidator->check($body);
         try {
             $location = new Location();

@@ -54,9 +54,9 @@ class DeleteAction
     public function __invoke(Request $request, string $id): Response
     {
         try {
+            $this->authorizer->authorizeToRole($request, 'user.roles.super');
             $query = $request->getQueryParams();
             if (!empty($query) && isset($query['hard']) && $query['hard'] == 'true') {
-                $this->authorizer->authorizeToRole($request, 'user.roles.super');
                 $this->deleteHard($id);
                 return $this->jsonResponseFactory->create(204);
             }

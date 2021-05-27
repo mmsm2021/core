@@ -3,15 +3,17 @@
 namespace App\Database\Repositories;
 
 use App\Database\Entities\Location;
-use App\Database\Entities\Log;
 use App\Database\RepositoryInterface;
 use App\Database\Traits\Repository\TimestampPropertyTrait;
 use App\Exceptions\DeleteException;
 use App\Exceptions\NoSuchEntityException;
 use App\Exceptions\SaveException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\QueryException;
 
 class LocationRepository implements RepositoryInterface
 {
@@ -153,6 +155,33 @@ class LocationRepository implements RepositoryInterface
         }
     }
 
+    /**
+     * @param Criteria|null $criteria
+     * @return ArrayCollection
+     */
+    public function getList(?Criteria $criteria = null): ArrayCollection
+    {
+        $collection = new ArrayCollection;
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $qb->select('u')
+                ->from(Location::class, 'u');
+            if ($criteria !== null) {
+                $qb->addCriteria($criteria);
+            }
+            $result = $qb->getQuery()->getResult();
+            if (!is_array($result)) {
+                $result = [];
+            }
+            foreach ($result as $item) {
+                /** @var Location $item */
+                $collection->add($item->toArray());
+            }
+            return $collection;
+        } catch (QueryException $exception) {
+            return $collection;
+        }
+    }
     /**
      * @param Location $location
      * @throws \App\Exceptions\IncompatibleTraitException

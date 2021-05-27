@@ -1628,16 +1628,16 @@
         },
         {
             "name": "mmsm/service-lib",
-            "version": "2.0.2",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmsm2021/service-lib.git",
-                "reference": "0dd7fc3a911ec2326740327ccbdf341179359602"
+                "reference": "8869a1ba3ac4076cae2941da2e88faadda663ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmsm2021/service-lib/zipball/0dd7fc3a911ec2326740327ccbdf341179359602",
-                "reference": "0dd7fc3a911ec2326740327ccbdf341179359602",
+                "url": "https://api.github.com/repos/mmsm2021/service-lib/zipball/8869a1ba3ac4076cae2941da2e88faadda663ba6",
+                "reference": "8869a1ba3ac4076cae2941da2e88faadda663ba6",
                 "shasum": ""
             },
             "require": {
@@ -1671,10 +1671,10 @@
             ],
             "description": "Service Library",
             "support": {
-                "source": "https://github.com/mmsm2021/service-lib/tree/2.0.2",
+                "source": "https://github.com/mmsm2021/service-lib/tree/2.1.0",
                 "issues": "https://github.com/mmsm2021/service-lib/issues"
             },
-            "time": "2021-05-26T10:08:00+00:00"
+            "time": "2021-05-27T10:31:52+00:00"
         },
         {
             "name": "monolog/monolog",

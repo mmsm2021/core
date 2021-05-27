@@ -192,6 +192,16 @@ class Location implements EntityInterface
             ->nullable(true)
             ->build();
 
+        $builder->createField('street', Types::STRING)
+            ->nullable(false)
+            ->length(255)
+            ->build();
+
+        $builder->createField('number', Types::STRING)
+            ->nullable(false)
+            ->length(20)
+            ->build();
+
         $builder->createField('createdAt', Types::DATETIMETZ_IMMUTABLE)
             ->nullable(false)
             ->columnName('created_at')
