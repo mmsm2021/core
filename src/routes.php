@@ -14,8 +14,8 @@ $app->add($container->get(\MMSM\Lib\AuthorizationMiddleware::class));
 $app->add($container->get(\Slim\Middleware\BodyParsingMiddleware::class));
 
 $app->group('/api/v1', function(RouteCollectorProxy $group) {
-    $group->get('/location', ListAction::class);
-    $group->get('/location/{id}', GetAction::class);
-    $group->post('/location', PostAction::class);
-    $group->delete('/location/{id}', DeleteAction::class);
+    $group->get('/locations', ListAction::class);
+    $group->get('/locations/{id}', GetAction::class);
+    $group->post('/locations', PostAction::class);
+    $group->delete('/locations/{id}', DeleteAction::class);
 });
