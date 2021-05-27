@@ -51,7 +51,9 @@ final class Version20210524135428 extends AbstractMigration
      */
     public function down(Schema $schema): void
     {
-        $schema->dropTable('locations');
+        if ($schema->hasTable(LocationRepository::TABLE_NAME)) {
+            $schema->dropTable(LocationRepository::TABLE_NAME);
+        }
     }
 
     /**

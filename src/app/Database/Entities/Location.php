@@ -40,6 +40,37 @@ class Location implements EntityInterface
     private array $metadata = [];
 
     /**
+     * @var string
+     */
+    private string $street;
+
+    /**
+     * The number on the street and the floor(if any)
+     * @var string
+     */
+    private string $number;
+
+    /**
+     * @var string
+     */
+    private string $zipcode;
+
+    /**
+     * @var string
+     */
+    private string $city;
+
+    /**
+     * @var string|null
+     */
+    private ?string $state = null;
+
+    /**
+     * @var Country
+     */
+    private Country $country;
+
+    /**
      * @var DateTimeImmutable
      */
     private DateTimeImmutable $createdAt;
@@ -117,6 +148,103 @@ class Location implements EntityInterface
     public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getStreet(): string
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string $street
+     */
+    public function setStreet(string $street): void
+    {
+        $this->street = $street;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber(): string
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     */
+    public function setNumber(string $number): void
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipcode(): string
+    {
+        return $this->zipcode;
+    }
+
+    /**
+     * @param string $zipcode
+     */
+    public function setZipcode(string $zipcode): void
+    {
+        $this->zipcode = $zipcode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param string|null $state
+     */
+    public function setState(?string $state): void
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     */
+    public function setCountry(Country $country): void
+    {
+        $this->country = $country;
     }
 
     /**
@@ -200,6 +328,27 @@ class Location implements EntityInterface
         $builder->createField('number', Types::STRING)
             ->nullable(false)
             ->length(20)
+            ->build();
+
+        $builder->createField('zipcode', Types::STRING)
+            ->nullable(false)
+            ->length(10)
+            ->build();
+
+        $builder->createField('city', Types::STRING)
+            ->nullable(false)
+            ->length(100)
+            ->build();
+
+        $builder->createField('state', Types::STRING)
+            ->nullable(true)
+            ->length(255)
+            ->build();
+
+        $builder->createManyToOne('country', Country::class)
+            ->inversedBy('locations')
+            ->addJoinColumn('country', 'iso3', false)
+            ->fetchEager()
             ->build();
 
         $builder->createField('createdAt', Types::DATETIMETZ_IMMUTABLE)

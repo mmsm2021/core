@@ -97,6 +97,7 @@ class ListAction
                 $criteria->andWhere(Criteria::expr()->isNull('deletedAt'));
             } else {
                 $criteria->where(Criteria::expr()->isNull('deletedAt'));
+                $and = true;
             }
         }
 
