@@ -6,9 +6,3 @@ if [ -d "/init.sh.d" ]; then
         . "$f"
     done
 fi
-
-if [ "${1#-}" != "$1" ]; then
-	set -- php-fpm "$@"
-fi
-
-exec "$@"

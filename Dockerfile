@@ -39,14 +39,14 @@ COPY images/prod/config/default.conf /etc/nginx/conf.d/default.conf
 COPY images/prod/config/nginx.conf /etc/nginx/nginx.conf
 COPY images/prod/config/php-fpm.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY images/prod/entrypoint.sh /entrypoint.sh
+COPY images/prod/scripts /entrypoint.sh.d
 
-RUN chmod +x /entrypoint.sh && \
+RUN chmod -R a+x /entrypoint.sh.d && \
+    chmod a+x /entrypoint.sh && \
     rm -rf src/vendor; wget https://getcomposer.org/download/latest-2.x/composer.phar --output-document=/usr/local/bin/composer && \
     chmod +x /usr/local/bin/composer && \
     composer install --no-dev && \
     rm -f /usr/local/bin/composer
 
 EXPOSE 80
-#TODO: Make script that runs migrations
-ENTRYPOINT /entrypoint.sh
-CMD php-fpm && nginx -g "daemon off;"
+CMD php-fpm && sh /entrypoint.sh && nginx -g "daemon off;"
