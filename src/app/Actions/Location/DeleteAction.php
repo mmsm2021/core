@@ -116,7 +116,7 @@ class DeleteAction
             return $this->jsonResponseFactory->create(204);
         } catch (NoSuchEntityException $exception) {
             return $this->jsonResponseFactory->create(410, [
-                'error' => false,
+                'error' => true,
                 'message' => 'Entity is gone.',
             ]);
         } catch (DeleteException $exception) {
