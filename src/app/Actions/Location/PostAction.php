@@ -73,12 +73,13 @@ class PostAction
      *     path="/api/v1/locations",
      *     summary="Creates new location from carried JSON",
      *     tags={"Location"},
-     *     @OA\Header(
-     *         header="Authorization",
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
      *         description="Bearer {id-token}",
      *         required=true,
      *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
+     *             ref="#/components/schemas/jwt"
      *         )
      *     ),
      *     @OA\RequestBody(

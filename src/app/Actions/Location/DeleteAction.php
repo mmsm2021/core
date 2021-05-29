@@ -9,6 +9,7 @@ use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpInternalServerErrorException;
 use Throwable;
 
 class DeleteAction
@@ -49,12 +50,13 @@ class DeleteAction
      *     path="/api/v1/locations/{id}",
      *     summary="Delete af given location by id.",
      *     tags={"Location"},
-     *     @OA\Header(
-     *         header="Authorization",
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
      *         description="Bearer {id-token}",
      *         required=true,
      *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
+     *             ref="#/components/schemas/jwt"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -118,10 +120,11 @@ class DeleteAction
                 'message' => 'Entity is gone.',
             ]);
         } catch (DeleteException $exception) {
-            return $this->jsonResponseFactory->create(500, [
-                'error' => true,
-                'message' => $exception->getMessage(),
-            ]);
+            throw new HttpInternalServerErrorException(
+                $request,
+                $exception->getMessage(),
+                $exception
+            );
         }
     }
 

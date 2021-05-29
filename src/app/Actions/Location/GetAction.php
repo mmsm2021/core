@@ -8,6 +8,7 @@ use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Exception\HttpNotFoundException;
 use Throwable;
 
 class GetAction
@@ -48,12 +49,13 @@ class GetAction
      *     path="/api/v1/locations/{id}",
      *     summary="Returns a JSON object of a location",
      *     tags={"Location"},
-     *     @OA\Header(
-     *         header="Authorization",
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
      *         description="Bearer {id-token}",
      *         required=false,
      *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
+     *             ref="#/components/schemas/jwt"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -95,10 +97,11 @@ class GetAction
             );
             return $this->jsonResponseFactory->create(200, $location->toArray());
         } catch (NoSuchEntityException $exception) {
-            return $this->jsonResponseFactory->create(404, [
-                'error' => true,
-                'message' => $exception->getMessage(),
-            ]);
+            throw new HttpNotFoundException(
+                $request,
+                $exception->getMessage(),
+                $exception
+            );
         }
     }
 }

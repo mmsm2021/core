@@ -15,6 +15,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
+use Slim\Exception\HttpNotFoundException;
 
 class PatchAction
 {
@@ -70,12 +71,13 @@ class PatchAction
      *     path="/api/v1/locations/{id}",
      *     summary="Updates location from carried JSON",
      *     tags={"Location"},
-     *     @OA\Header(
-     *         header="Authorization",
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
      *         description="Bearer {id-token}",
      *         required=true,
      *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
+     *             ref="#/components/schemas/jwt"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -108,6 +110,11 @@ class PatchAction
      *         @OA\JsonContent(ref="#/components/schemas/error")
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
      *         response=500,
      *         description="will contain a JSON object with a message.",
      *         @OA\JsonContent(ref="#/components/schemas/error")
@@ -118,6 +125,7 @@ class PatchAction
      * @return Response
      * @throws HttpBadRequestException
      * @throws HttpInternalServerErrorException
+     * @throws HttpNotFoundException
      */
     public function __invoke(Request $request, string $id): Response
     {
@@ -187,7 +195,7 @@ class PatchAction
             $this->locationRepository->save($location);
             return $this->jsonResponseFactory->create(200, $location->toArray());
         } catch (NoSuchEntityException $noSuchEntityException) {
-            throw new HttpBadRequestException(
+            throw new HttpNotFoundException(
                 $request,
                 'Failed to find location by id "' . $id . '".',
                 $noSuchEntityException

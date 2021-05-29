@@ -59,12 +59,13 @@ class ListAction
      *     path="/api/v1/locations",
      *     summary="Returns array of locations",
      *     tags={"Location"},
-     *     @OA\Header(
-     *         header="Authorization",
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
      *         description="Bearer {id-token}",
      *         required=false,
      *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
+     *             ref="#/components/schemas/jwt"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -161,7 +162,7 @@ class ListAction
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Will reply with the created locations in JSON format",
+     *         description="Will reply with the locations in JSON format",
      *         @OA\JsonContent(ref="#/components/schemas/LocationList")
      *     ),
      *     @OA\Response(
@@ -181,7 +182,8 @@ class ListAction
     public function __invoke(Request $request): Response
     {
         return $this->jsonResponseFactory->create(200, $this->locationRepository->getList(
-            $this->getQueryCriteria($request)
+            $this->getQueryCriteria($request),
+            true
         )->toArray());
     }
 

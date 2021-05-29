@@ -157,9 +157,10 @@ class LocationRepository implements RepositoryInterface
 
     /**
      * @param Criteria|null $criteria
+     * @param bool $asArrays
      * @return ArrayCollection
      */
-    public function getList(?Criteria $criteria = null): ArrayCollection
+    public function getList(?Criteria $criteria = null, bool $asArrays = false): ArrayCollection
     {
         $collection = new ArrayCollection;
         try {
@@ -175,7 +176,7 @@ class LocationRepository implements RepositoryInterface
             }
             foreach ($result as $item) {
                 /** @var Location $item */
-                $collection->add($item->toArray());
+                $collection->add(($asArrays ? $item->toArray() : $item));
             }
             return $collection;
         } catch (QueryException $exception) {
