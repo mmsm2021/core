@@ -47,6 +47,7 @@ RUN chmod -R a+x /entrypoint.sh.d && \
     chmod +x /usr/local/bin/composer && \
     composer install && \
     php ./openapi.php > ./static/swagger.json && \
+    chown www-data:www-data ./static/swagger.json && \
     rm -f ./static/.gitkeep && \
     rm -rf ./vendor && \
     composer install --no-dev && \
