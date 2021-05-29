@@ -19,9 +19,11 @@ class Point
     /**
      * @var float
      * @OA\Property(
-     *   property="latitude",
-     *   type="string",
-     *   description="Latitude"
+     *     property="latitude",
+     *     type="string",
+     *     format="number",
+     *     description="Latitude",
+     *     default="0"
      * )
      */
     private float $latitude;
@@ -29,9 +31,11 @@ class Point
     /**
      * @var float
      * @OA\Property(
-     *   property="longitude",
-     *   type="string",
-     *   description="Longitude"
+     *     property="longitude",
+     *     type="string",
+     *     format="number",
+     *     description="Longitude",
+     *     default="0"
      * )
      */
     private float $longitude;

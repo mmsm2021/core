@@ -66,6 +66,53 @@ class PatchAction
     }
 
     /**
+     * @OA\Patch(
+     *     path="/api/v1/locations/{id}",
+     *     summary="Updates location from carried JSON",
+     *     tags={"Location"},
+     *     @OA\Header(
+     *         header="Authorization",
+     *         description="Bearer {id-token}",
+     *         required=true,
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The id of the location.",
+     *         required=true,
+     *         @OA\Schema(
+     *             ref="#/components/schemas/uuid"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="The Location that you want to create.",
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateLocationDTO"),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Will reply with the created locations in JSON format",
+     *         @OA\JsonContent(ref="#/components/schemas/Location")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     )
+     * )
      * @param Request $request
      * @param string $id
      * @return Response

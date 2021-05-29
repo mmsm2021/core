@@ -59,6 +59,14 @@ class ListAction
      *     path="/api/v1/locations",
      *     summary="Returns array of locations",
      *     tags={"Location"},
+     *     @OA\Header(
+     *         header="Authorization",
+     *         description="Bearer {id-token}",
+     *         required=false,
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         name="size",
      *         in="query",
@@ -151,15 +159,6 @@ class ListAction
      *             type="boolean"
      *         )
      *     ),
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         required=false,
-     *         description="Bearer {id-token}",
-     *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
-     *         )
-     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="Will reply with the created locations in JSON format",

@@ -36,7 +36,7 @@ use Slim\Routing\RouteCollectorProxy;
  *     schema="FreeForm",
  *     type="object",
  *     description="Key-value Pairs in a JSON Object.",
- *     additionalProperties=true
+ *     @OA\AdditionalProperties(type={"string","integer","number","object", "array", "boolean"})
  * )
  */
 

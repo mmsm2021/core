@@ -49,6 +49,14 @@ class DeleteAction
      *     path="/api/v1/locations/{id}",
      *     summary="Delete af given location by id.",
      *     tags={"Location"},
+     *     @OA\Header(
+     *         header="Authorization",
+     *         description="Bearer {id-token}",
+     *         required=true,
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -68,15 +76,6 @@ class DeleteAction
      *             default=false
      *         )
      *     ),
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         required=true,
-     *         description="Bearer {id-token}",
-     *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
-     *         )
-     *      ),
      *     @OA\Response(
      *         response=204,
      *         description="Will reply with an empty body if successful.",

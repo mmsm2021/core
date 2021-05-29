@@ -73,15 +73,19 @@ class PostAction
      *     path="/api/v1/locations",
      *     summary="Creates new location from carried JSON",
      *     tags={"Location"},
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         required=true,
+     *     @OA\Header(
+     *         header="Authorization",
      *         description="Bearer {id-token}",
+     *         required=true,
      *         @OA\Schema(
      *              ref="#/components/schemas/jwt"
      *         )
-     *      ),
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="The Location that you want to create.",
+     *         @OA\JsonContent(ref="#/components/schemas/CreateLocationDTO"),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Will reply with the created locations in JSON format",

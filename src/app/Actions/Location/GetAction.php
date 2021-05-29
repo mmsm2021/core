@@ -48,6 +48,14 @@ class GetAction
      *     path="/api/v1/locations/{id}",
      *     summary="Returns a JSON object of a location",
      *     tags={"Location"},
+     *     @OA\Header(
+     *         header="Authorization",
+     *         description="Bearer {id-token}",
+     *         required=false,
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -57,15 +65,6 @@ class GetAction
      *             ref="#/components/schemas/uuid"
      *         )
      *     ),
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         required=false,
-     *         description="Bearer {id-token}",
-     *         @OA\Schema(
-     *              ref="#/components/schemas/jwt"
-     *         )
-     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="Will reply with the location in JSON format",
