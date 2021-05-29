@@ -52,7 +52,7 @@ use Slim\Routing\RouteCollectorProxy;
  * @OA\Schema(
  *   schema="error",
  *   type="object",
- *   @OA\Property(property="error", type="bool"),
+ *   @OA\Property(property="error", type="boolean"),
  *   @OA\Property(
  *     property="message",
  *     type="array",
