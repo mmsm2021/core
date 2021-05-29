@@ -58,6 +58,7 @@ class ListAction
      * @OA\Get(
      *     path="/api/v1/locations",
      *     summary="Returns array of locations",
+     *     tags={"Location"},
      *     @OA\Parameter(
      *         name="size",
      *         in="query",

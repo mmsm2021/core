@@ -48,6 +48,7 @@ class DeleteAction
      * @OA\Delete(
      *     path="/api/v1/locations/{id}",
      *     summary="Delete af given location by id.",
+     *     tags={"Location"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -79,6 +80,11 @@ class DeleteAction
      *     @OA\Response(
      *         response=204,
      *         description="Will reply with an empty body if successful.",
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
      *     ),
      *     @OA\Response(
      *         response=410,

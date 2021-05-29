@@ -72,6 +72,7 @@ class PostAction
      * @OA\Post(
      *     path="/api/v1/locations",
      *     summary="Creates new location from carried JSON",
+     *     tags={"Location"},
      *     @OA\Parameter(
      *         name="Authorization",
      *         in="header",
@@ -88,6 +89,11 @@ class PostAction
      *     ),
      *     @OA\Response(
      *         response=400,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
+     *         response=403,
      *         description="will contain a JSON object with a message.",
      *         @OA\JsonContent(ref="#/components/schemas/error")
      *     ),

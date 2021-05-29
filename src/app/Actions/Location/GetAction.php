@@ -47,6 +47,7 @@ class GetAction
      * @OA\Get(
      *     path="/api/v1/locations/{id}",
      *     summary="Returns a JSON object of a location",
+     *     tags={"Location"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -71,7 +72,7 @@ class GetAction
      *         @OA\JsonContent(ref="#/components/schemas/Location")
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=404,
      *         description="will contain a JSON object with a message.",
      *         @OA\JsonContent(ref="#/components/schemas/error")
      *     ),
@@ -95,7 +96,7 @@ class GetAction
             );
             return $this->jsonResponseFactory->create(200, $location->toArray());
         } catch (NoSuchEntityException $exception) {
-            return $this->jsonResponseFactory->create(400, [
+            return $this->jsonResponseFactory->create(404, [
                 'error' => true,
                 'message' => $exception->getMessage(),
             ]);

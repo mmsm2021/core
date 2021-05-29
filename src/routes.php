@@ -25,8 +25,9 @@ use Slim\Routing\RouteCollectorProxy;
  * @OA\Schema(
  *   schema="jwt",
  *   type="string",
- *   format="JWT",
- *   description="A JSON Web Token"
+ *   format="jwt",
+ *   description="A JSON Web Token",
+ *   default="Bearer {id-token}"
  * )
  */
 
