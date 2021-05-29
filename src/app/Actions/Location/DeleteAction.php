@@ -63,7 +63,7 @@ class DeleteAction
      *         description="Determines if it is a hard or soft delete.",
      *         required=false,
      *         @OA\Schema(
-     *             type="bool",
+     *             type="boolean",
      *             default=false
      *         )
      *     ),

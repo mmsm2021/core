@@ -147,7 +147,7 @@ class ListAction
      *         description="Include deleted (requires Authorization header).",
      *         required=false,
      *         @OA\Schema(
-     *             type="bool"
+     *             type="boolean"
      *         )
      *     ),
      *     @OA\Parameter(
