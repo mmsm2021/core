@@ -9,8 +9,6 @@ use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use SimpleJWT\JWT;
-use Slim\Exception\HttpUnauthorizedException;
 use Throwable;
 
 class DeleteAction
@@ -34,6 +32,7 @@ class DeleteAction
      * Get constructor.
      * @param JsonResponseFactory $jsonResponseFactory
      * @param LocationRepository $locationRepository
+     * @param Authorizer $authorizer
      */
     public function __construct(
         JsonResponseFactory $jsonResponseFactory,
@@ -46,6 +45,52 @@ class DeleteAction
     }
 
     /**
+     * @OA\Delete(
+     *     path="/api/v1/locations/{id}",
+     *     summary="Delete af given location by id.",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The id of the location.",
+     *         required=true,
+     *         @OA\Schema(
+     *             ref="#/components/schemas/uuid"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="hard",
+     *         in="query",
+     *         description="Determines if it is a hard or soft delete.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="bool",
+     *             default=false
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
+     *         required=true,
+     *         description="Bearer {id-token}",
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Will reply with an empty body if successful.",
+     *     ),
+     *     @OA\Response(
+     *         response=410,
+     *         description="will contain a JSON object with a message happends if the entity could not be found by the given id.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     )
+     * )
      * @param Request $request
      * @param string $id
      * @return Response
@@ -64,6 +109,7 @@ class DeleteAction
             return $this->jsonResponseFactory->create(204);
         } catch (NoSuchEntityException $exception) {
             return $this->jsonResponseFactory->create(410, [
+                'error' => false,
                 'message' => 'Entity is gone.',
             ]);
         } catch (DeleteException $exception) {

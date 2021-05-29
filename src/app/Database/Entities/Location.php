@@ -15,73 +15,90 @@ use Ramsey\Uuid\Uuid;
 /**
  * Class Location
  * @package App\Database\Entities
+ * @OA\Schema(
+ *   schema="Location",
+ *   type="object",
+ *   description="Location object",
+ * )
  */
 class Location implements EntityInterface
 {
 
     /**
      * @var string
+     * @OA\Property(ref="#/components/schemas/uuid")
      */
     private string $id;
 
     /**
      * @var string
+     * @OA\Property()
      */
     private string $name;
 
     /**
      * @var Point
+     * @OA\Property(ref="#/components/schemas/Point")
      */
     private Point $point;
 
     /**
      * @var array
+     * @OA\Property(ref="#/components/schemas/FreeForm")
      */
     private array $metadata = [];
 
     /**
      * @var string
+     * @OA\Property()
      */
     private string $street;
 
     /**
-     * The number on the street and the floor(if any)
      * @var string
+     * @OA\Property(description="The number on the street and the floor if any")
      */
     private string $number;
 
     /**
      * @var string
+     * @OA\Property()
      */
     private string $zipcode;
 
     /**
      * @var string
+     * @OA\Property()
      */
     private string $city;
 
     /**
      * @var string|null
+     * @OA\Property()
      */
     private ?string $state = null;
 
     /**
      * @var Country
+     * @OA\Property(ref="#/components/schemas/Country")
      */
     private Country $country;
 
     /**
      * @var DateTimeImmutable
+     * @OA\Property(ref="#/components/schemas/timestamp")
      */
     private DateTimeImmutable $createdAt;
 
     /**
      * @var DateTimeImmutable|null
+     * @OA\Property(ref="#/components/schemas/timestamp")
      */
     private ?DateTimeImmutable $updatedAt = null;
 
     /**
      * @var DateTimeImmutable|null
+     * @OA\Property(ref="#/components/schemas/timestamp")
      */
     private ?DateTimeImmutable $deletedAt = null;
 
@@ -281,6 +298,12 @@ class Location implements EntityInterface
             'name' => $this->getName(),
             'point' => $this->getPoint()->toArray(),
             'metadata' => $this->getMetadata(),
+            'street' => $this->getStreet(),
+            'number' => $this->getNumber(),
+            'zipcode' => $this->getZipcode(),
+            'city' => $this->getCity(),
+            'state' => $this->getState(),
+            'country' => $this->getCountry()->toArray(),
             'createdAt' => $this->getCreatedAt()->format(\DateTimeInterface::ISO8601),
             'updatedAt' => ($this->getUpdatedAt() instanceof DateTimeImmutable ?
             $this->getUpdatedAt()->format(\DateTimeInterface::ISO8601) : null),

@@ -44,6 +44,43 @@ class GetAction
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/v1/locations/{id}",
+     *     summary="Returns a JSON object of a location",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The id of the location.",
+     *         required=true,
+     *         @OA\Schema(
+     *             ref="#/components/schemas/uuid"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
+     *         required=false,
+     *         description="Bearer {id-token}",
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Will reply with the location in JSON format",
+     *         @OA\JsonContent(ref="#/components/schemas/Location")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     )
+     * )
      * @param Request $request
      * @param string $id
      * @return Response

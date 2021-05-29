@@ -2,7 +2,10 @@
 
 namespace App\Actions\Location;
 
+use App\Database\Entities\Country;
+use App\Database\Repositories\CountryRepository;
 use App\Database\Repositories\LocationRepository;
+use App\Exceptions\NoSuchEntityException;
 use Doctrine\Common\Collections\Criteria;
 use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
@@ -28,21 +31,150 @@ class ListAction
     private Authorizer $authorizer;
 
     /**
+     * @var CountryRepository
+     */
+    private CountryRepository $countryRepository;
+
+    /**
      * Get constructor.
      * @param JsonResponseFactory $jsonResponseFactory
      * @param LocationRepository $locationRepository
+     * @param Authorizer $authorizer
+     * @param CountryRepository $countryRepository
      */
     public function __construct(
         JsonResponseFactory $jsonResponseFactory,
         LocationRepository $locationRepository,
-        Authorizer $authorizer
+        Authorizer $authorizer,
+        CountryRepository $countryRepository
     ) {
         $this->jsonResponseFactory = $jsonResponseFactory;
         $this->locationRepository = $locationRepository;
         $this->authorizer = $authorizer;
+        $this->countryRepository = $countryRepository;
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/v1/locations",
+     *     summary="Returns array of locations",
+     *     @OA\Parameter(
+     *         name="size",
+     *         in="query",
+     *         description="The amount of Locations returned",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=20
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="offset",
+     *         in="query",
+     *         description="The amount of Locations to skip",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=0
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Search for name.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="street",
+     *         in="query",
+     *         description="Search for street.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="number",
+     *         in="query",
+     *         description="Search for number.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="zipcode",
+     *         in="query",
+     *         description="Search for zipcde.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="query",
+     *         description="Search for city.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="state",
+     *         in="query",
+     *         description="Search for state.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="country",
+     *         in="query",
+     *         description="Search for country.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="deleted",
+     *         in="query",
+     *         description="Include deleted (requires Authorization header).",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="bool"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
+     *         required=false,
+     *         description="Bearer {id-token}",
+     *         @OA\Schema(
+     *              ref="#/components/schemas/jwt"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Will reply with the created locations in JSON format",
+     *         @OA\JsonContent(ref="#/components/schemas/LocationList")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="will contain a JSON object with a message.",
+     *         @OA\JsonContent(ref="#/components/schemas/error")
+     *     )
+     * )
      * @param Request $request
      * @return Response
      */
@@ -83,9 +215,30 @@ class ListAction
         $criteria->setFirstResult($offset);
 
         $and = false;
-        if (v::arrayType()->key('name', v::stringType()->notEmpty())->validate($params)) {
-            $criteria->where(Criteria::expr()->contains('name', $params['name']));
-            $and = true;
+        $this->search('name', $params, $criteria, $and);
+        $this->search('street', $params, $criteria, $and);
+        $this->search('number', $params, $criteria, $and);
+        $this->search('zipcode', $params, $criteria, $and);
+        $this->search('city', $params, $criteria, $and);
+        $this->search('state', $params, $criteria, $and);
+
+        if (v::arrayType()->key('country', v::stringType()->notEmpty())->validate($params)) {
+            try {
+                $country = $this->countryRepository->getByIso3($params['country']);
+            } catch (NoSuchEntityException $noSuchEntityException) {
+                try {
+                    $country = $this->countryRepository->getByName($params['country']);
+                } catch (NoSuchEntityException $noSuchEntityException) {
+                    $country = false;
+                }
+            }
+            if ($country instanceof Country) {
+                if ($and) {
+                    $criteria->andWhere(Criteria::expr()->eq('country', $country));
+                } else {
+                    $criteria->where(Criteria::expr()->eq('country', $country));
+                }
+            }
         }
 
         $includeDeleted = v::arrayType()
@@ -102,5 +255,27 @@ class ListAction
         }
 
         return $criteria;
+    }
+
+    /**
+     * @param string $name
+     * @param array $params
+     * @param Criteria $criteria
+     * @param bool $and
+     */
+    public function search(
+        string $name,
+        array $params,
+        Criteria $criteria,
+        bool &$and
+    ): void {
+        if (v::arrayType()->key($name, v::stringType()->notEmpty())->validate($params)) {
+            if ($and) {
+                $criteria->andWhere(Criteria::expr()->contains($name, $params[$name]));
+            } else {
+                $criteria->where(Criteria::expr()->contains($name, $params[$name]));
+                $and = true;
+            }
+        }
     }
 }

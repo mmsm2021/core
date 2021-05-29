@@ -10,15 +10,26 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
+/**
+ * Class Country
+ * @package App\Database\Entities
+ * @OA\Schema(
+ *   schema="Country",
+ *   type="object",
+ *   description="Country object",
+ * )
+ */
 class Country implements EntityInterface
 {
     /**
      * @var string
+     * @OA\Property()
      */
     private string $iso3;
 
     /**
      * @var string
+     * @OA\Property()
      */
     private string $name;
 

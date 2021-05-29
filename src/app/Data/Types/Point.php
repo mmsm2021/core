@@ -5,15 +5,34 @@ namespace App\Data\Types;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validator as v;
 
+/**
+ * Class Point
+ * @package App\Data\Types
+ * @OA\Schema(
+ *   schema="Point",
+ *   type="object",
+ *   description="Point object",
+ * )
+ */
 class Point
 {
     /**
      * @var float
+     * @OA\Property(
+     *   property="latitude",
+     *   type="string",
+     *   description="Latitude"
+     * )
      */
     private float $latitude;
 
     /**
      * @var float
+     * @OA\Property(
+     *   property="longitude",
+     *   type="string",
+     *   description="Longitude"
+     * )
      */
     private float $longitude;
 

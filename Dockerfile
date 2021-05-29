@@ -45,6 +45,10 @@ RUN chmod -R a+x /entrypoint.sh.d && \
     chmod a+x /entrypoint.sh && \
     rm -rf src/vendor; wget https://getcomposer.org/download/latest-2.x/composer.phar --output-document=/usr/local/bin/composer && \
     chmod +x /usr/local/bin/composer && \
+    composer install && \
+    php ./openapi.php > ./static/swagger.json && \
+    rm -f ./static/.gitkeep && \
+    rm -rf ./vendor && \
     composer install --no-dev && \
     rm -f /usr/local/bin/composer
 
