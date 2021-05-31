@@ -90,7 +90,7 @@ class PostAction
      *         @OA\JsonContent(ref="#/components/schemas/error")
      *     ),
      *     @OA\Response(
-     *         response=403,
+     *         response=401,
      *         description="will contain a JSON object with a message.",
      *         @OA\JsonContent(ref="#/components/schemas/error")
      *     ),
