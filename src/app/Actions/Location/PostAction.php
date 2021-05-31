@@ -7,7 +7,7 @@ use App\Data\Validator\LocationValidator;
 use App\Database\Entities\Location;
 use App\Database\Repositories\CountryRepository;
 use App\Database\Repositories\LocationRepository;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use App\Exceptions\SaveException;
 use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
@@ -146,7 +146,7 @@ class PostAction
             }
             try {
                 $country = $this->countryRepository->getByIso3($body['country']);
-            } catch (NoSuchEntityException $exception) {
+            } catch (EntityNotFoundException $exception) {
                 $country = $this->countryRepository->getByName($body['country']);
             }
             $location->setCountry($country);
@@ -154,8 +154,8 @@ class PostAction
             return $this->jsonResponseFactory->create(200, $location->toArray());
         } catch (SaveException $exception) {
             throw new HttpInternalServerErrorException($request, $exception->getMessage(), $exception);
-        } catch (NoSuchEntityException $noSuchEntityException) {
-            throw new HttpBadRequestException($request, 'Invalid Country', $noSuchEntityException);
+        } catch (EntityNotFoundException $entityNotFoundException) {
+            throw new HttpBadRequestException($request, 'Invalid Country', $entityNotFoundException);
         }
     }
 }

@@ -6,7 +6,7 @@ use App\Database\Entities\Location;
 use App\Database\RepositoryInterface;
 use App\Database\Traits\Repository\TimestampPropertyTrait;
 use App\Exceptions\DeleteException;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use App\Exceptions\SaveException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -64,7 +64,7 @@ class LocationRepository implements RepositoryInterface
      * @param string $id
      * @param bool $includeDeleted
      * @return Location
-     * @throws NoSuchEntityException
+     * @throws EntityNotFoundException
      */
     public function getById(string $id, bool $includeDeleted = false): Location
     {
@@ -76,7 +76,7 @@ class LocationRepository implements RepositoryInterface
         $query->setParameter(1, $id);
         $result = $query->getResult();
         if (empty($result)) {
-            throw new NoSuchEntityException('Failed to find a location by id "' . $id . '".');
+            throw new EntityNotFoundException('Failed to find a location by id "' . $id . '".');
         }
         return $result[array_keys($result)[0]];
     }
@@ -91,7 +91,7 @@ class LocationRepository implements RepositoryInterface
         try {
             $this->getById($id, $includeDeleted);
             return true;
-        } catch (NoSuchEntityException $exception) {
+        } catch (EntityNotFoundException $exception) {
             return false;
         }
     }
@@ -150,6 +150,7 @@ class LocationRepository implements RepositoryInterface
         } catch (\Throwable $exception) {
             throw new DeleteException(
                 'Failed to delete location with id "' . $location->getId() . '".',
+                $exception->getCode(),
                 $exception
             );
         }

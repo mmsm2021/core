@@ -4,7 +4,7 @@ namespace App\Actions\Location;
 
 use App\Database\Repositories\LocationRepository;
 use App\Exceptions\DeleteException;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -114,7 +114,7 @@ class DeleteAction
             }
             $this->deleteSoft($id);
             return $this->jsonResponseFactory->create(204);
-        } catch (NoSuchEntityException $exception) {
+        } catch (EntityNotFoundException $exception) {
             return $this->jsonResponseFactory->create(410, [
                 'error' => true,
                 'message' => ['Entity is gone.'],
@@ -131,7 +131,7 @@ class DeleteAction
     /**
      * @param string $id
      * @throws DeleteException
-     * @throws NoSuchEntityException
+     * @throws EntityNotFoundException
      */
     protected function deleteHard(string $id): void
     {
@@ -144,7 +144,7 @@ class DeleteAction
     /**
      * @param string $id
      * @throws DeleteException
-     * @throws NoSuchEntityException
+     * @throws EntityNotFoundException
      */
     protected function deleteSoft(string $id): void
     {

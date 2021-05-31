@@ -4,7 +4,7 @@ namespace App\Database\Repositories;
 
 use App\Database\Entities\Country;
 use App\Database\RepositoryInterface;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
@@ -56,7 +56,7 @@ class CountryRepository implements RepositoryInterface
     /**
      * @param string $iso3
      * @return Country
-     * @throws NoSuchEntityException
+     * @throws EntityNotFoundException
      */
     public function getByIso3(string $iso3): Country
     {
@@ -65,7 +65,7 @@ class CountryRepository implements RepositoryInterface
         $query->setParameter(1, $iso3);
         $result = $query->getResult();
         if (empty($result)) {
-            throw new NoSuchEntityException('Failed to find a country by iso3 "' . $iso3 . '".');
+            throw new EntityNotFoundException('Failed to find a country by iso3 "' . $iso3 . '".');
         }
         return $result[array_keys($result)[0]];
     }
@@ -73,7 +73,7 @@ class CountryRepository implements RepositoryInterface
     /**
      * @param string $name
      * @return Country
-     * @throws NoSuchEntityException
+     * @throws EntityNotFoundException
      */
     public function getByName(string $name): Country
     {
@@ -82,7 +82,7 @@ class CountryRepository implements RepositoryInterface
         $query->setParameter(1, $name);
         $result = $query->getResult();
         if (empty($result)) {
-            throw new NoSuchEntityException('Failed to find a country by name "' . $name . '".');
+            throw new EntityNotFoundException('Failed to find a country by name "' . $name . '".');
         }
         return $result[array_keys($result)[0]];
     }

@@ -3,7 +3,7 @@
 namespace App\Actions\Country;
 
 use App\Database\Repositories\CountryRepository;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -77,11 +77,11 @@ class GetAction
             return $this->jsonResponseFactory->create(200,
                 $this->countryRepository->getByIso3($iso3)->toArray()
             );
-        } catch (NoSuchEntityException $noSuchEntityException) {
+        } catch (EntityNotFoundException $entityNotFoundException) {
             throw new HttpNotFoundException(
                 $request,
-                $noSuchEntityException->getMessage(),
-                $noSuchEntityException
+                $entityNotFoundException->getMessage(),
+                $entityNotFoundException
             );
         }
     }

@@ -3,7 +3,7 @@
 namespace App\Actions\Location;
 
 use App\Database\Repositories\LocationRepository;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -96,7 +96,7 @@ class GetAction
                 $this->authorizer->hasRole($request, 'user.roles.super', false)
             );
             return $this->jsonResponseFactory->create(200, $location->toArray());
-        } catch (NoSuchEntityException $exception) {
+        } catch (EntityNotFoundException $exception) {
             throw new HttpNotFoundException(
                 $request,
                 $exception->getMessage(),

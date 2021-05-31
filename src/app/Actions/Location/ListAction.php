@@ -5,7 +5,7 @@ namespace App\Actions\Location;
 use App\Database\Entities\Country;
 use App\Database\Repositories\CountryRepository;
 use App\Database\Repositories\LocationRepository;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use Doctrine\Common\Collections\Criteria;
 use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
@@ -227,10 +227,10 @@ class ListAction
         if (v::arrayType()->key('country', v::stringType()->notEmpty())->validate($params)) {
             try {
                 $country = $this->countryRepository->getByIso3($params['country']);
-            } catch (NoSuchEntityException $noSuchEntityException) {
+            } catch (EntityNotFoundException $noSuchEntityException) {
                 try {
                     $country = $this->countryRepository->getByName($params['country']);
-                } catch (NoSuchEntityException $noSuchEntityException) {
+                } catch (EntityNotFoundException $noSuchEntityException) {
                     $country = false;
                 }
             }

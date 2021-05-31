@@ -7,7 +7,7 @@ use App\Data\Validator\LocationValidator;
 use App\Database\Entities\Country;
 use App\Database\Repositories\CountryRepository;
 use App\Database\Repositories\LocationRepository;
-use App\Exceptions\NoSuchEntityException;
+use App\Exceptions\EntityNotFoundException;
 use App\Exceptions\SaveException;
 use MMSM\Lib\Authorizer;
 use MMSM\Lib\Factories\JsonResponseFactory;
@@ -175,10 +175,10 @@ class PatchAction
                         }
                         try {
                             $country = $this->countryRepository->getByIso3($iso3);
-                        } catch (NoSuchEntityException $noSuchEntityException) {
+                        } catch (EntityNotFoundException $entityNotFoundException) {
                             try {
                                 $country = $this->countryRepository->getByName($iso3);
-                            } catch (NoSuchEntityException $noSuchEntityException) {
+                            } catch (EntityNotFoundException $entityNotFoundException) {
                                 $country = false;
                             }
                         }
@@ -194,11 +194,11 @@ class PatchAction
             }
             $this->locationRepository->save($location);
             return $this->jsonResponseFactory->create(200, $location->toArray());
-        } catch (NoSuchEntityException $noSuchEntityException) {
+        } catch (EntityNotFoundException $entityNotFoundException) {
             throw new HttpNotFoundException(
                 $request,
                 'Failed to find location by id "' . $id . '".',
-                $noSuchEntityException
+                $entityNotFoundException
             );
         } catch (SaveException $saveException) {
             throw new HttpInternalServerErrorException(
