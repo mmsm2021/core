@@ -117,7 +117,7 @@ class DeleteAction
         } catch (NoSuchEntityException $exception) {
             return $this->jsonResponseFactory->create(410, [
                 'error' => true,
-                'message' => 'Entity is gone.',
+                'message' => ['Entity is gone.'],
             ]);
         } catch (DeleteException $exception) {
             throw new HttpInternalServerErrorException(
