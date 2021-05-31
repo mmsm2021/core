@@ -2,6 +2,7 @@ src/vendor
 .idea
 data/
 src/var
+src/cache
 swagger.json
 src/swagger.json
 src/static/swagger.json
