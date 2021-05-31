@@ -50,15 +50,7 @@ class DeleteAction
      *     path="/api/v1/locations/{id}",
      *     summary="Delete af given location by id.",
      *     tags={"Location"},
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         description="Bearer {id-token}",
-     *         required=true,
-     *         @OA\Schema(
-     *             ref="#/components/schemas/jwt"
-     *         )
-     *     ),
+     *     security={{ "bearerAuth":{} }},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

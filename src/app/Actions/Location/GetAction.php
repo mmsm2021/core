@@ -49,15 +49,7 @@ class GetAction
      *     path="/api/v1/locations/{id}",
      *     summary="Returns a JSON object of a location",
      *     tags={"Location"},
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         description="Bearer {id-token}",
-     *         required=false,
-     *         @OA\Schema(
-     *             ref="#/components/schemas/jwt"
-     *         )
-     *     ),
+     *     security={{ "bearerAuth":{} }},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

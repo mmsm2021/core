@@ -73,15 +73,7 @@ class PostAction
      *     path="/api/v1/locations",
      *     summary="Creates new location from carried JSON",
      *     tags={"Location"},
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         description="Bearer {id-token}",
-     *         required=true,
-     *         @OA\Schema(
-     *             ref="#/components/schemas/jwt"
-     *         )
-     *     ),
+     *     security={{ "bearerAuth":{} }},
      *     @OA\RequestBody(
      *         required=true,
      *         description="The Location that you want to create.",

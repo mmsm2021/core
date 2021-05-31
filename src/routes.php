@@ -15,6 +15,19 @@ use Slim\Routing\RouteCollectorProxy;
  */
 
 /**
+ * @OA\Components(
+ *     @OA\SecurityScheme(
+ *         securityScheme="bearerAuth",
+ *         type="http",
+ *         name="Authorization",
+ *         in="header",
+ *         scheme="bearer",
+ *         bearerFormat="JWT"
+ *     )
+ * )
+ */
+
+/**
  * @OA\Schema(
  *   schema="uuid",
  *   type="string",

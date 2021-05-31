@@ -71,15 +71,7 @@ class PatchAction
      *     path="/api/v1/locations/{id}",
      *     summary="Updates location from carried JSON",
      *     tags={"Location"},
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         description="Bearer {id-token}",
-     *         required=true,
-     *         @OA\Schema(
-     *             ref="#/components/schemas/jwt"
-     *         )
-     *     ),
+     *     security={{ "bearerAuth":{} }},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

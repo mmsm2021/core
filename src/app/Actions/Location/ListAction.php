@@ -59,15 +59,7 @@ class ListAction
      *     path="/api/v1/locations",
      *     summary="Returns array of locations",
      *     tags={"Location"},
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         description="Bearer {id-token}",
-     *         required=false,
-     *         @OA\Schema(
-     *             ref="#/components/schemas/jwt"
-     *         )
-     *     ),
+     *     security={{ "bearerAuth":{} }},
      *     @OA\Parameter(
      *         name="size",
      *         in="query",
